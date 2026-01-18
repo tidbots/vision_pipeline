@@ -17,11 +17,11 @@ vision_pipeline/
 │              ├── 
 │              └──
 │   
-└── src/yolo_26
+└── src/yolo26
     ├── docker/
     │     ├── Dockerfile
     │     └── entrypoint.sh
-    └─── src/yolo_26
+    └─── src/yolo26
           ├── launch/
           │    ├── 
           │    └── 
