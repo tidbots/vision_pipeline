@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>yolo26_ros</name>
+  <version>0.1.0</version>
+  <description>YOLO26 ROS1 node with tiling and GPU (Docker)</description>
+
+  <maintainer email="you@example.com">your name</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>cv_bridge</depend>
+  <depend>image_transport</depend>
+  <depend>vision_msgs</depend>
+  <depend>geometry_msgs</depend>
+</package>
