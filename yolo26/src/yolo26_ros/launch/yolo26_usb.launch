@@ -47,6 +47,19 @@
     <param name="conf" value="0.25"/>
     <param name="iou" value="0.45"/>
 
+    <!-- Depth ROI -->
+    <param name="use_depth_roi" value="true"/>
+    <param name="depth_topic" value="/camera/depth/image_raw"/>
+    <param name="min_depth" value="0.3"/>
+    <param name="max_depth" value="1.5"/>
+
+    <!-- class names -->
+    <param name="classes_yaml"
+       value="$(find yolo26_ros)/config/classes.yaml"/>
+
+    <!-- confidence -->
+    <param name="conf_window" value="50"/>
+
     <!-- Tiling -->
     <param name="tile_enable" value="true"/>
     <param name="tile_size" value="640"/>         <!-- タイル一辺 -->
