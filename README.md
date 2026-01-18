@@ -17,7 +17,7 @@ vision_pipeline/
 │              ├── 
 │              └──
 │   
-└── src/yolo26
+└── yolo26
     ├── docker/
     │     ├── Dockerfile
     │     └── entrypoint.sh
