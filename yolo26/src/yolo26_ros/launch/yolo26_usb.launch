@@ -8,83 +8,74 @@
     <param name="camera_frame_id" value="usb_cam"/>
   </node>
 
-  <node pkg="image_preprocess"
-        type="preprocess_node.py"
-        name="image_preprocess"
-        output="screen">
+  <node pkg="yolo26_ros" type="yolo26_node.py" name="yolo26_node" output="screen">
 
-    <param name="input_topic"  value="/usb_cam/image_raw"/>
-    <param name="output_topic" value="/camera/image_preprocessed"/>
-
-    <!-- brightness thresholds -->
-    <param name="dark_thresh"   value="60"/>
-    <param name="bright_thresh" value="190"/>
-
-    <!-- gamma -->
-    <param name="gamma_dark"    value="0.6"/>
-    <param name="gamma_normal"  value="1.0"/>
-    <param name="gamma_bright"  value="1.6"/>
-
-    <!-- CLAHE -->
-    <param name="use_clahe"     value="true"/>
-    <param name="clahe_clip"    value="2.0"/>
-    <param name="clahe_grid"    value="8"/>
-  </node>
-
-  <node pkg="yolo26_ros" type="yolo26_node.py" name="yolo26" output="screen">
-
-    <!-- Topics -->
+    <!-- topics -->
     <param name="input_topic" value="/camera/image_preprocessed"/>
-    <param name="detections_topic" value="~detections"/>
-    <param name="annotated_topic" value="~image_annotated"/>
+    <param name="detections_topic" value="/yolo26/detections"/>
+    <param name="annotated_topic" value="/yolo26/image_annotated"/>
     <param name="debug_enable" value="true"/>
     <param name="debug_topic" value="/yolo26/image_debug"/>
 
-    <!-- Model -->
+    <!-- model -->
     <param name="model_path" value="/models/yolo26s.pt"/>
-    <param name="device" value="0"/>              <!-- "0" or "cpu" -->
+    <param name="device" value="0"/>
     <param name="imgsz" value="960"/>
     <param name="conf" value="0.25"/>
     <param name="iou" value="0.45"/>
 
-<!-- Depth ROI -->
-<param name="use_depth_roi" value="true"/>
-<param name="depth_topic" value="/camera/depth/image_raw"/>
-<param name="depth_encoding_hint" value="32FC1"/> <!-- 16UC1 の場合は 16UC1 -->
-<param name="depth_scale" value="0.001"/>         <!-- 16UC1 (mm)→m -->
-<param name="min_depth" value="0.25"/>
-<param name="max_depth" value="1.80"/>
-<param name="roi_margin_px" value="10"/>
-<param name="roi_min_area_ratio" value="0.02"/>
-<param name="roi_fallback_full" value="true"/>
-<param name="roi_limit_bottom_ratio" value="1.0"/> <!-- 0.6等にすると下側のみ -->
-
-<!-- class names -->
-<param name="show_class_names" value="true"/>
-<param name="classes_yaml" value="$(find yolo26_ros)/config/classes.yaml"/>
-
-<!-- confidence histogram -->
-<param name="hist_enable" value="true"/>
-<param name="hist_topic" value="/yolo26/confidence_hist"/>
-<param name="hist_window" value="120"/>
-<param name="hist_publish_every" value="10"/>
-    <!-- Tiling -->
+    <!-- tile -->
     <param name="tile_enable" value="true"/>
-    <param name="tile_size" value="640"/>         <!-- タイル一辺 -->
-    <param name="tile_overlap" value="0.20"/>     <!-- 20% overlap -->
-    <param name="tile_only_roi" value="true"/>    <!-- ROIだけタイル推論 -->
+    <param name="tile_size" value="640"/>
+    <param name="tile_overlap" value="0.25"/>
 
-    <!-- ROI（棚/床などを固定するならここ） -->
-    <!-- ROIを使わないなら roi_enable=false -->
-    <param name="roi_enable" value="false"/>
-    <param name="roi_x" value="0"/>
-    <param name="roi_y" value="0"/>
-    <param name="roi_w" value="0"/>
-    <param name="roi_h" value="0"/>
+    <!-- depth ROI -->
+    <param name="use_depth_roi" value="true"/>
+    <param name="depth_topic" value="/camera/depth/image_raw"/>
+    <param name="depth_scale" value="0.001"/>
+    <param name="min_depth" value="0.25"/>
+    <param name="max_depth" value="1.80"/>
+    <param name="roi_margin_px" value="10"/>
+    <param name="roi_min_area_ratio" value="0.02"/>
+    <param name="roi_fallback_full" value="true"/>
 
-    <!-- Visualization -->
-    <param name="publish_annotated" value="true"/>
-    <param name="label_font_scale" value="0.5"/>
-    <param name="label_thickness" value="1"/>
+    <!-- class names -->
+    <param name="show_class_names" value="true"/>
+    <param name="classes_yaml" value="$(find yolo26_ros)/config/classes.yaml"/>
+
+    <!-- confidence histogram -->
+    <param name="hist_enable" value="true"/>
+    <param name="hist_topic" value="/yolo26/confidence_hist"/>
+    <param name="hist_window_scores" value="1200"/>
+    <param name="hist_publish_every" value="10"/>
+
+    <!-- =========================
+         Auto re-tuning (ON/OFF)
+         ========================= -->
+    <param name="auto_tune_enable" value="true"/>
+
+    <!-- how often to adjust -->
+    <param name="auto_tune_every" value="10"/>
+    <param name="auto_tune_min_interval" value="0.5"/>
+    <param name="auto_ema_alpha" value="0.2"/>
+
+    <!-- bounds -->
+    <param name="conf_min" value="0.12"/>
+    <param name="conf_max" value="0.45"/>
+    <param name="overlap_min" value="0.15"/>
+    <param name="overlap_max" value="0.35"/>
+
+    <!-- step sizes -->
+    <param name="conf_step_down" value="0.02"/>
+    <param name="conf_step_up" value="0.01"/>
+    <param name="overlap_step_up" value="0.05"/>
+    <param name="overlap_step_down" value="0.03"/>
+
+    <!-- trigger thresholds -->
+    <param name="bad_mean_conf_thr" value="0.35"/>
+    <param name="bad_zero_det_frames" value="8"/>
+    <param name="good_mean_conf_thr" value="0.60"/>
+    <param name="good_det_thr" value="2"/>
+
   </node>
 </launch>
