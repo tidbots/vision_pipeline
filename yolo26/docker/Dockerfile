@@ -62,7 +62,7 @@ RUN python3 -m pip install --no-cache-dir \
 # catkin workspace
 # ------------------------------------------------------------
 WORKDIR /catkin_ws
-COPY src /catkin_ws/src
+COPY yolo26/src /catkin_ws/src
 
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make"
 
