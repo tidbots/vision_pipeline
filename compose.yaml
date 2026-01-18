@@ -22,9 +22,9 @@ services:
   # ----------------------------------------
   # YOLO26 Detection (GPU)
   # ----------------------------------------
-  yolo26_ros:
+  yolo26:
     build:
-      context: ./yolo26_ros
+      context: ./yolo26
       dockerfile: docker/Dockerfile
     container_name: yolo26_ros
     network_mode: host
@@ -39,7 +39,7 @@ services:
       - YOLO_CONFIG_DIR=/tmp/Ultralytics
     volumes:
       - /dev:/dev
-      - ./yolo26_ros/models:/models:ro
+      - ./yolo26/models:/models:ro
     command: >
       roslaunch yolo26_ros yolo26.launch
     restart: unless-stopped
