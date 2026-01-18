@@ -339,6 +339,17 @@ max_depth: 1.80
 - yolo26：自動 conf / tile_overlap（検出が落ちたときの保険）
 の 2段構えで入れる（どちらも launch で個別にON/OFF可）。
 
+### 使い方（ON/OFF の切替）
+自動再チューニング ON（推奨）
+```
+launch 内で auto_tune_enable=true
+```
+
+OFF（固定パラメータで運用）
+```
+launch 内で auto_tune_enable=false
+```
+例：preprocess.launch のみ OFF にする（YOLO側だけ自動、なども可能）
 
 ### 方針
 ```
