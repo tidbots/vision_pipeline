@@ -1,0 +1,45 @@
+services:
+  # ----------------------------------------
+  # Image Preprocess (CPU)
+  # ----------------------------------------
+  image_preprocess:
+    build:
+      context: ./image_preprocess
+      dockerfile: docker/Dockerfile
+    container_name: vision_preprocess
+    network_mode: host
+    ipc: host
+    privileged: true
+    environment:
+      - ROS_MASTER_URI=http://localhost:11311
+      - ROS_IP=127.0.0.1
+    volumes:
+      - /dev:/dev
+    command: >
+      roslaunch image_preprocess preprocess.launch
+    restart: unless-stopped
+
+  # ----------------------------------------
+  # YOLO26 Detection (GPU)
+  # ----------------------------------------
+  yolo26_ros:
+    build:
+      context: ./yolo26_ros
+      dockerfile: docker/Dockerfile
+    container_name: yolo26_ros
+    network_mode: host
+    ipc: host
+    privileged: true
+    gpus: all
+    depends_on:
+      - preprocess
+    environment:
+      - ROS_MASTER_URI=http://localhost:11311
+      - ROS_IP=127.0.0.1
+      - YOLO_CONFIG_DIR=/tmp/Ultralytics
+    volumes:
+      - /dev:/dev
+      - ./yolo26_ros/models:/models:ro
+    command: >
+      roslaunch yolo26_ros yolo26.launch
+    restart: unless-stopped
