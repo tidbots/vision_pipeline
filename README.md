@@ -10,6 +10,8 @@ vision_pipeline/
 │   │     ├── Dockerfile
 │   │     └── entrypoint.sh
 │   └─── src/image_preprocessed
+│         ├── CMakeLists.txt
+│         ├── package.xml
 │         ├── launch/
 │         │    ├── 
 │         │    └── 
@@ -22,6 +24,8 @@ vision_pipeline/
     │     ├── Dockerfile
     │     └── entrypoint.sh
     └─── src/yolo26
+          ├── CMakeLists.txt
+          ├── package.xml
           ├── launch/
           │    ├── 
           │    └── 
