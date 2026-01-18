@@ -67,11 +67,14 @@ vision_pipeline/
   - CLAHE（局所コントラスト補正）
         ↓
 /camera/image_preprocessed   (sensor_msgs/Image)
+/camera/depth/image_raw   ← 深度画像
         ↓
 [ yolo26_node ]
   - YOLO26 推論
         ↓
 /yolo26/detections           (vision_msgs/Detection2DArray)
 /yolo26/image_annotated      (sensor_msgs/Image)
+/yolo26/image_debug
+/yolo26/confidence_hist 
 ```
 
