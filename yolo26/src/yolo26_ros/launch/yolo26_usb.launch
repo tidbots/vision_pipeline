@@ -1,0 +1,69 @@
+<launch>
+  <!-- usb_cam -->
+  <node pkg="usb_cam" type="usb_cam_node" name="usb_cam" output="screen">
+    <param name="video_device" value="/dev/video0"/>
+    <param name="image_width"  value="640"/>
+    <param name="image_height" value="480"/>
+    <param name="pixel_format" value="mjpeg"/>
+    <param name="camera_frame_id" value="usb_cam"/>
+  </node>
+
+  <node pkg="image_preprocess"
+        type="preprocess_node.py"
+        name="image_preprocess"
+        output="screen">
+
+    <param name="input_topic"  value="/usb_cam/image_raw"/>
+    <param name="output_topic" value="/camera/image_preprocessed"/>
+
+    <!-- brightness thresholds -->
+    <param name="dark_thresh"   value="60"/>
+    <param name="bright_thresh" value="190"/>
+
+    <!-- gamma -->
+    <param name="gamma_dark"    value="0.6"/>
+    <param name="gamma_normal"  value="1.0"/>
+    <param name="gamma_bright"  value="1.6"/>
+
+    <!-- CLAHE -->
+    <param name="use_clahe"     value="true"/>
+    <param name="clahe_clip"    value="2.0"/>
+    <param name="clahe_grid"    value="8"/>
+  </node>
+
+  <node pkg="yolo26_ros" type="yolo26_node.py" name="yolo26" output="screen">
+
+    <!-- Topics -->
+    <param name="input_topic" value="/camera/image_preprocessed"/>
+    <param name="detections_topic" value="~detections"/>
+    <param name="annotated_topic" value="~image_annotated"/>
+    <param name="debug_enable" value="true"/>
+    <param name="debug_topic" value="/yolo26/image_debug"/>
+
+    <!-- Model -->
+    <param name="model_path" value="/models/yolo26s.pt"/>
+    <param name="device" value="0"/>              <!-- "0" or "cpu" -->
+    <param name="imgsz" value="960"/>
+    <param name="conf" value="0.25"/>
+    <param name="iou" value="0.45"/>
+
+    <!-- Tiling -->
+    <param name="tile_enable" value="true"/>
+    <param name="tile_size" value="640"/>         <!-- タイル一辺 -->
+    <param name="tile_overlap" value="0.20"/>     <!-- 20% overlap -->
+    <param name="tile_only_roi" value="true"/>    <!-- ROIだけタイル推論 -->
+
+    <!-- ROI（棚/床などを固定するならここ） -->
+    <!-- ROIを使わないなら roi_enable=false -->
+    <param name="roi_enable" value="false"/>
+    <param name="roi_x" value="0"/>
+    <param name="roi_y" value="0"/>
+    <param name="roi_w" value="0"/>
+    <param name="roi_h" value="0"/>
+
+    <!-- Visualization -->
+    <param name="publish_annotated" value="true"/>
+    <param name="label_font_scale" value="0.5"/>
+    <param name="label_thickness" value="1"/>
+  </node>
+</launch>
