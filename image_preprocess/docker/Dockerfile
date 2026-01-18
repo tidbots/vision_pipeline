@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
 
 # ---- workspace ----
 WORKDIR /catkin_ws
-COPY image_preprocess/src /catkin_ws/src
+COPY src /catkin_ws/src
 
 # ---- build ----
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make"
@@ -28,6 +28,9 @@ RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make"
 # ---- entrypoint ----
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+ENV ROS_PACKAGE_PATH=/catkin_ws/src:${ROS_PACKAGE_PATH}
+ENV YOLO_CONFIG_DIR=/tmp/Ultralytics
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]

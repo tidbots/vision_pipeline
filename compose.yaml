@@ -32,7 +32,7 @@ services:
     privileged: true
     gpus: all
     depends_on:
-      - preprocess
+      - image_preprocess
     environment:
       - ROS_MASTER_URI=http://localhost:11311
       - ROS_IP=127.0.0.1
@@ -41,5 +41,5 @@ services:
       - /dev:/dev
       - ./yolo26/models:/models:ro
     command: >
-      roslaunch yolo26_ros yolo26.launch
+      roslaunch yolo26_ros yolo26_usb.launch
     restart: unless-stopped
