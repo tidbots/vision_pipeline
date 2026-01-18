@@ -92,6 +92,16 @@ vision_pipeline/
 /camera/image_preprocessed   (sensor_msgs/Image)
 /camera/depth/image_raw   ← 深度画像
         ↓
+```
+### Gamma補正（暗所/白飛び対策）
+- 暗い → γ < 1.0
+- 明るすぎ → γ > 1.0
+
+### CLAHE（局所コントラスト正規化）
+- 通常のHistogram Equalizationより安全
+- 実機照明のムラに強い
+
+```
 [ yolo26_node ]
   - YOLO26 推論
         ↓
