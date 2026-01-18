@@ -47,19 +47,27 @@
     <param name="conf" value="0.25"/>
     <param name="iou" value="0.45"/>
 
-    <!-- Depth ROI -->
-    <param name="use_depth_roi" value="true"/>
-    <param name="depth_topic" value="/camera/depth/image_raw"/>
-    <param name="min_depth" value="0.3"/>
-    <param name="max_depth" value="1.5"/>
+<!-- Depth ROI -->
+<param name="use_depth_roi" value="true"/>
+<param name="depth_topic" value="/camera/depth/image_raw"/>
+<param name="depth_encoding_hint" value="32FC1"/> <!-- 16UC1 の場合は 16UC1 -->
+<param name="depth_scale" value="0.001"/>         <!-- 16UC1 (mm)→m -->
+<param name="min_depth" value="0.25"/>
+<param name="max_depth" value="1.80"/>
+<param name="roi_margin_px" value="10"/>
+<param name="roi_min_area_ratio" value="0.02"/>
+<param name="roi_fallback_full" value="true"/>
+<param name="roi_limit_bottom_ratio" value="1.0"/> <!-- 0.6等にすると下側のみ -->
 
-    <!-- class names -->
-    <param name="classes_yaml"
-       value="$(find yolo26_ros)/config/classes.yaml"/>
+<!-- class names -->
+<param name="show_class_names" value="true"/>
+<param name="classes_yaml" value="$(find yolo26_ros)/config/classes.yaml"/>
 
-    <!-- confidence -->
-    <param name="conf_window" value="50"/>
-
+<!-- confidence histogram -->
+<param name="hist_enable" value="true"/>
+<param name="hist_topic" value="/yolo26/confidence_hist"/>
+<param name="hist_window" value="120"/>
+<param name="hist_publish_every" value="10"/>
     <!-- Tiling -->
     <param name="tile_enable" value="true"/>
     <param name="tile_size" value="640"/>         <!-- タイル一辺 -->
